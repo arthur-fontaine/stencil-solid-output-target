@@ -23,7 +23,7 @@ export const config: Config = {
   outputTargets: [
     solidOutputTarget({
       componentCorePackage: 'component-library',
-      proxiesFile: '../component-library-vue/src/components.ts',
+      proxiesFile: '../component-library-solid/src/components.ts',
     }),
     {
       type: 'dist',
