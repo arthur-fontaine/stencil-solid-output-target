@@ -8,8 +8,6 @@ const SLASH_REGEX = /\\/g;
 // eslint-disable-next-line no-control-regex
 const NON_ASCII_REGEX = /[^\x00-\x80]+/;
 export const toLowerCase = (str) => str.toLowerCase();
-export const dashToCamelCase = (str) => str
-    .replace(/-([a-z])/g, (_, up) => up.toUpperCase());
 export const dashToPascalCase = (str) => toLowerCase(str)
     .split('-')
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
