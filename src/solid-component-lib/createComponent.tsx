@@ -1,4 +1,4 @@
-import {JSX, Component} from 'solid-js';
+import {JSX, Component, createSignal, onMount} from 'solid-js';
 import h from 'solid-js/h';
 import {camelToDashCase} from "./utils";
 
@@ -15,18 +15,11 @@ const createComponent = <ElementType extends HTMLStencilElement>(
   tagName: string,
   props: StencilSolidInternalProps<ElementType>,
 ): JSX.Element => {
-  let {children: cChildren, ...cProps} = props ?? {};
-
-  cProps = Object.entries(cProps).reduce((acc, [key, value]) => {
-    acc[camelToDashCase(key)] = value;
-    return acc;
-  }, {} as typeof cProps);
-
   let children: JSX.Element[] = [];
 
-  if (cChildren) {
-    if (Array.isArray(cChildren)) {
-      children = cChildren.map((child: any) => {
+  if (props.children) {
+    if (Array.isArray(props.children)) {
+      children = props.children.map((child: any) => {
         if (typeof child === 'string') {
           return child;
         } else if (typeof child === 'function') {
@@ -35,16 +28,16 @@ const createComponent = <ElementType extends HTMLStencilElement>(
           return createComponent(_h, child.tagName, child.props);
         }
       });
-    } else if (typeof cChildren === 'string') {
-      children = [cChildren];
-    } else if (typeof cChildren === 'function') {
-      children = [cChildren()];
-    } else if (typeof cChildren === 'object') {
-      children = [createComponent(_h, tagName, cChildren)];
+    } else if (typeof props.children === 'string') {
+      children = [props.children];
+    } else if (typeof props.children === 'function') {
+      children = [props.children()];
+    } else if (typeof props.children === 'object') {
+      children = [createComponent(_h, tagName, props.children)];
     }
   }
 
-  return _h(tagName, cProps, children);
+  return _h(tagName, props, children);
 };
 
 export const createSolidComponent = <PropType, ElementType extends HTMLStencilElement, ExpandedPropsTypes = {}>(
@@ -58,10 +51,17 @@ export const createSolidComponent = <PropType, ElementType extends HTMLStencilEl
     defineCustomElement();
   }
 
-  // const displayName = dashToPascalCase(tagName);
+  function SolidComponentWrapper(props: { children: JSX.Element } & any) {
+    const [component, setComponent] = createSignal(createComponent(h, tagName, props));
 
-  function SolidComponentWrapper({children, ...propsToPass}: { children: JSX.Element } & any) {
-    return createComponent<ElementType>(h, tagName, {children, ...(manipulatePropsFunction ? manipulatePropsFunction(propsToPass) : propsToPass)});
+    onMount(() => {
+      Object.entries(Object.getOwnPropertyDescriptors(props)).forEach(([key, descriptor]) => {
+        Object.defineProperty(props, camelToDashCase(key), descriptor);
+      })
+      setComponent(createComponent(h, tagName, props));
+    })
+
+    return component;
   }
 
   return SolidComponentWrapper;
