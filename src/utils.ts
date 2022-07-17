@@ -14,9 +14,6 @@ const NON_ASCII_REGEX = /[^\x00-\x80]+/;
 
 export const toLowerCase = (str: string) => str.toLowerCase();
 
-export const dashToCamelCase = (str: string) => str
-  .replace(/-([a-z])/g, (_, up) => up.toUpperCase());
-
 export const dashToPascalCase = (str: string) => toLowerCase(str)
   .split('-')
   .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))

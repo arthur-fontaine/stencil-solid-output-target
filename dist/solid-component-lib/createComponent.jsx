@@ -10,9 +10,14 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 import h from 'solid-js/h';
+import { camelToDashCase } from "./utils";
 // https://harin76.medium.com/generating-solid-js-components-from-json-7cc5ef37c7f4
 const createComponent = (_h, tagName, props) => {
-    const _a = props !== null && props !== void 0 ? props : {}, { children: cChildren } = _a, cProps = __rest(_a, ["children"]);
+    let _a = props !== null && props !== void 0 ? props : {}, { children: cChildren } = _a, cProps = __rest(_a, ["children"]);
+    cProps = Object.entries(cProps).reduce((acc, [key, value]) => {
+        acc[camelToDashCase(key)] = value;
+        return acc;
+    }, {});
     let children = [];
     if (cChildren) {
         if (Array.isArray(cChildren)) {

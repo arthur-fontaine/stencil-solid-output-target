@@ -1,5 +1,6 @@
-import { JSX, Component } from 'solid-js';
+import {JSX, Component} from 'solid-js';
 import h from 'solid-js/h';
+import {camelToDashCase} from "./utils";
 
 export interface HTMLStencilElement extends HTMLElement {
   componentOnReady(): Promise<this>;
@@ -14,7 +15,12 @@ const createComponent = <ElementType extends HTMLStencilElement>(
   tagName: string,
   props: StencilSolidInternalProps<ElementType>,
 ): JSX.Element => {
-  const { children: cChildren, ...cProps } = props ?? {};
+  let {children: cChildren, ...cProps} = props ?? {};
+
+  cProps = Object.entries(cProps).reduce((acc, [key, value]) => {
+    acc[camelToDashCase(key)] = value;
+    return acc;
+  }, {} as typeof cProps);
 
   let children: JSX.Element[] = [];
 
@@ -54,8 +60,8 @@ export const createSolidComponent = <PropType, ElementType extends HTMLStencilEl
 
   // const displayName = dashToPascalCase(tagName);
 
-  function SolidComponentWrapper({ children, ...propsToPass }: { children: JSX.Element } & any) {
-    return createComponent<ElementType>(h, tagName, { children, ...(manipulatePropsFunction ? manipulatePropsFunction(propsToPass) : propsToPass) });
+  function SolidComponentWrapper({children, ...propsToPass}: { children: JSX.Element } & any) {
+    return createComponent<ElementType>(h, tagName, {children, ...(manipulatePropsFunction ? manipulatePropsFunction(propsToPass) : propsToPass)});
   }
 
   return SolidComponentWrapper;
