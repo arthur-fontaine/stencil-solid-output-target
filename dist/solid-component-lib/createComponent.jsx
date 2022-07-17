@@ -1,27 +1,12 @@
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
+import { createSignal, onMount } from 'solid-js';
 import h from 'solid-js/h';
 import { camelToDashCase } from "./utils";
 // https://harin76.medium.com/generating-solid-js-components-from-json-7cc5ef37c7f4
 const createComponent = (_h, tagName, props) => {
-    let _a = props !== null && props !== void 0 ? props : {}, { children: cChildren } = _a, cProps = __rest(_a, ["children"]);
-    cProps = Object.entries(cProps).reduce((acc, [key, value]) => {
-        acc[camelToDashCase(key)] = value;
-        return acc;
-    }, {});
     let children = [];
-    if (cChildren) {
-        if (Array.isArray(cChildren)) {
-            children = cChildren.map((child) => {
+    if (props.children) {
+        if (Array.isArray(props.children)) {
+            children = props.children.map((child) => {
                 if (typeof child === 'string') {
                     return child;
                 }
@@ -33,26 +18,31 @@ const createComponent = (_h, tagName, props) => {
                 }
             });
         }
-        else if (typeof cChildren === 'string') {
-            children = [cChildren];
+        else if (typeof props.children === 'string') {
+            children = [props.children];
         }
-        else if (typeof cChildren === 'function') {
-            children = [cChildren()];
+        else if (typeof props.children === 'function') {
+            children = [props.children()];
         }
-        else if (typeof cChildren === 'object') {
-            children = [createComponent(_h, tagName, cChildren)];
+        else if (typeof props.children === 'object') {
+            children = [createComponent(_h, tagName, props.children)];
         }
     }
-    return _h(tagName, cProps, children);
+    return _h(tagName, props, children);
 };
 export const createSolidComponent = (tagName, manipulatePropsFunction, defineCustomElement) => {
     if (defineCustomElement !== undefined) {
         defineCustomElement();
     }
-    // const displayName = dashToPascalCase(tagName);
-    function SolidComponentWrapper(_a) {
-        var { children } = _a, propsToPass = __rest(_a, ["children"]);
-        return createComponent(h, tagName, Object.assign({ children }, (manipulatePropsFunction ? manipulatePropsFunction(propsToPass) : propsToPass)));
+    function SolidComponentWrapper(props) {
+        const [component, setComponent] = createSignal(createComponent(h, tagName, props));
+        onMount(() => {
+            Object.entries(Object.getOwnPropertyDescriptors(props)).forEach(([key, descriptor]) => {
+                Object.defineProperty(props, camelToDashCase(key), descriptor);
+            });
+            setComponent(createComponent(h, tagName, props));
+        });
+        return component;
     }
     return SolidComponentWrapper;
 };
