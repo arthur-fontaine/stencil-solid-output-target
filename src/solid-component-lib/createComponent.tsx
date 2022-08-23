@@ -1,4 +1,4 @@
-import {JSX, Component, createSignal, onMount} from 'solid-js';
+import {JSX, Component} from 'solid-js';
 import h from 'solid-js/h';
 import {camelToDashCase} from "./utils";
 
@@ -52,16 +52,11 @@ export const createSolidComponent = <PropType, ElementType extends HTMLStencilEl
   }
 
   function SolidComponentWrapper(props: { children: JSX.Element } & any) {
-    const [component, setComponent] = createSignal(createComponent(h, tagName, props));
-
-    onMount(() => {
-      Object.entries(Object.getOwnPropertyDescriptors(props)).forEach(([key, descriptor]) => {
-        Object.defineProperty(props, camelToDashCase(key), descriptor);
-      })
-      setComponent(createComponent(h, tagName, props));
+    Object.entries(Object.getOwnPropertyDescriptors(props)).forEach(([key, descriptor]) => {
+      Object.defineProperty(props, camelToDashCase(key), descriptor);
     })
 
-    return component;
+    return createComponent(h, tagName, props);
   }
 
   return SolidComponentWrapper;

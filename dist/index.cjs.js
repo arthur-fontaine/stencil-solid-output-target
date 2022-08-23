@@ -182,7 +182,7 @@ const copyResources = async (config, outputTarget) => {
     if (!config.sys || !config.sys.copy || !config.sys.glob) {
         throw new Error('stencil is not properly initialized at this step. Notify the developer');
     }
-    const srcDirectory = path__namespace.join(__dirname, 'solid-component-lib');
+    const srcDirectory = path__namespace.join(__dirname, '..', 'src', 'solid-component-lib');
     const destDirectory = path__namespace.join(path__namespace.dirname(outputTarget.proxiesFile), 'solid-component-lib');
     return config.sys.copy([
         {
