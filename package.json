@@ -52,7 +52,7 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(js|ts|tsx)$": "<rootDir>/test/jest.preprocessor.js"
+      "^.+\\.(js|ts|tsx)$": "<rootDir>/test/jest.preprocessor.cjs"
     },
     "testRegex": "(\\.(test|spec))\\.(ts?|tsx?|jsx?)$",
     "moduleFileExtensions": [
@@ -64,6 +64,11 @@
     ],
     "testEnvironmentOptions": {
       "url": "http://localhost"
-    }
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/example/"
+    ]
   }
 }
