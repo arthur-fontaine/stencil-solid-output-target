@@ -10,7 +10,7 @@ interface StencilSolidInternalProps<ElementType>
 	extends JSX.DOMAttributes<ElementType> {}
 
 export interface ComponentSupplementaryTypes {
-	style?: Record<string, any>;
+	style?: JSX.CSSProperties;
 	slot?: string;
 }
 
