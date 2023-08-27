@@ -48,7 +48,7 @@
     "unbuild": "^1.2.1"
   },
   "peerDependencies": {
-    "@stencil/core": "^3"
+    "@stencil/core": "^4"
   },
   "engines": {
     "node": ">=16.0.0"
