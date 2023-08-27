@@ -10,6 +10,16 @@ Stencil can generate Solid component wrappers for your web components. This allo
 npm install stencil-solid-output-target
 ```
 
+### Versioning
+
+Here are the versions of `stencil-solid-output-target` that correspond to the different versions of Stencil:
+
+| Stencil Version | `stencil-solid-output-target` Version |
+|-----------------|--------------------------------------|
+| 2.x             | 0.x                                  |
+| 3.x             | 3.x                                  |
+| 4.x             | 4.x                                  |
+
 ## Usage
 
 In your `stencil.config.ts` add the following configuration to the `outputTargets` section:
