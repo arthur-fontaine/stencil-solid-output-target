@@ -6,7 +6,12 @@ export interface HTMLStencilElement extends HTMLElement {
   componentOnReady(): Promise<this>;
 }
 
-interface StencilSolidInternalProps<ElementType> extends JSX.DOMAttributes<ElementType> {
+interface StencilSolidInternalProps<ElementType>
+  extends JSX.DOMAttributes<ElementType> { }
+
+export interface ComponentSupplementaryTypes {
+  style?: JSX.CSSProperties;
+  slot?: string;
 }
 
 // https://harin76.medium.com/generating-solid-js-components-from-json-7cc5ef37c7f4
@@ -50,7 +55,7 @@ export const createSolidComponent = <PropType, ElementType extends HTMLStencilEl
     newProps: any
   ) => ExpandedPropsTypes,
   defineCustomElement?: () => void,
-): Component<PropType & JSX.DOMAttributes<ElementType>> => {
+): Component<PropType & JSX.DOMAttributes<ElementType> & ComponentSupplementaryTypes> => {
   if (defineCustomElement !== undefined) {
     defineCustomElement();
   }
