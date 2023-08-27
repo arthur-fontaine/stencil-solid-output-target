@@ -1,0 +1,12 @@
+{
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "prebuild": "rm -rf dist component-library-solid loader",
+    "build": "npm run prebuild && stencil build --docs"
+  },
+  "devDependencies": {
+    "stencil-solid-output-target": "file:.."
+  }
+}
