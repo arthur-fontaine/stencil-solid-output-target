@@ -15,6 +15,7 @@ export interface ComponentSupplementaryTypes {
   class?: string
   className?: string
   slot?: string
+  [key in string]: any
 }
 
 // https://harin76.medium.com/generating-solid-js-components-from-json-7cc5ef37c7f4
