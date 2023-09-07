@@ -1,6 +1,6 @@
-import {JSX, Component} from 'solid-js';
+import { JSX, Component } from 'solid-js';
 import h from 'solid-js/h';
-import {camelToDashCase} from "./utils";
+import { camelToDashCase } from "./utils";
 
 export interface HTMLStencilElement extends HTMLElement {
   componentOnReady(): Promise<this>;
@@ -10,8 +10,12 @@ interface StencilSolidInternalProps<ElementType>
   extends JSX.DOMAttributes<ElementType> { }
 
 export interface ComponentSupplementaryTypes {
-  style?: JSX.CSSProperties;
-  slot?: string;
+  key?: any
+  style?: JSX.CSSProperties
+  class?: string
+  className?: string
+  slot?: string
+  [key in string]: any
 }
 
 // https://harin76.medium.com/generating-solid-js-components-from-json-7cc5ef37c7f4
